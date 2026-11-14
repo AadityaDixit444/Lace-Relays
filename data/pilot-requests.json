@@ -4,12 +4,13 @@
     "sizeUk": 7,
     "referenceUrl": "https://www.amazon.in/Nike-Alleyoop-Black-White-Black-Skateboarding/dp/B07Q4DLNJ3",
     "referenceModel": "Nike Alleyoop",
-    "referenceArticle": null,
+    "referenceArticle": "CJ0882-001",
     "referenceColor": "Black / White / Black",
-    "verificationStatus": "reference-only",
-    "verificationNote": "Amazon returned a verification challenge. User supplied identifier 1624832, but no matching Nike manufacturer article was verified; its field label is still needed.",
+    "verificationStatus": "two-retailers-verified",
+    "verificationNote": "Resolved independently from the confirmed screenshot colourway, two SKU references and Nykaa manufacturer-coded image. Nykaa and the Amazon India UK 7 ASIN B07Q5G672R have verified source mappings. Identifier 1624832 remains unverified and was not used as a manufacturer code.",
     "suppliedIdentifier": "1624832",
-    "identifierStatus": "unverified"
+    "identifierStatus": "unverified",
+    "shoeId": "nike-sb-alleyoop-black-white"
   },
   {
     "query": "Nike Precision 8 Low",

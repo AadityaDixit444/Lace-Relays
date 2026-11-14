@@ -9,11 +9,11 @@ import { shoes } from "../lib/catalog";
 
 test("catalog search separates tracked pairs from previews and pending references", () => {
   const all = catalogSearch("");
-  assert.equal(all.tracked.length, 3);
+  assert.equal(all.tracked.length, 4);
   assert.ok(all.preview.some((s) => s.id === "samba-og"));
   assert.deepEqual(
     all.pending.map((r) => r.query),
-    ["Nike Alleyoop", "PUMA McLaren Racing Speedcat"],
+    ["PUMA McLaren Racing Speedcat"],
   );
   for (const s of all.tracked)
     assert.ok(!all.preview.some((p) => p.id === s.id));
@@ -41,10 +41,7 @@ test("catalog matching supports unordered words, article punctuation and UK-size
     ["air-jordan-1-mid-se-mango"],
   );
   assert.equal(catalogSearch("309452_01").pending.length, 1);
-  assert.equal(
-    catalogSearch("1624832").pending[0]?.referenceModel,
-    "Nike Alleyoop",
-  );
+  assert.equal(catalogSearch("1624832").pending.length, 0);
   assert.equal(catalogSearch("1624832").tracked.length, 0);
   assert.equal(catalogSearch("no such shoe").tracked.length, 0);
 });

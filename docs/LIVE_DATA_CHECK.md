@@ -159,3 +159,32 @@ Next production build and secret scans. ESLint now excludes ignored provider dum
 and virtualenv directories, rather than linting downloaded third-party scripts.
 The upstream Starlette/httpx test-client deprecation warning remains. These changes
 have not been pushed to GitHub or redeployed.
+
+
+## Alleyoop independently resolved — 14 November 2026
+
+The desired adult Black/White-Black SB Alleyoop is CJ0882-001. StockX and
+GOAT article references agree; Nykaa listing 25302058 has the article in its
+product image filename. The user-supplied 1624832 is still unverified and is
+not used as a manufacturer identifier. No further user information is required.
+
+The original Amazon ASIN B07Q4DLNJ3 selects UK 5. Provider family B0GF9LHWZC
+explicitly identifies B07Q5G672R as UK 7 of the same colour. The new adapter
+checks the selected ASIN, parent, India marketplace, title, size/colour dimensions,
+INR price and source timestamp on each refresh; sibling prices are never copied.
+Amazon does not supply a manufacturer article, so that identity remains a manually
+reviewed mapping, supported by the other retailer references. Provider sibling
+URLs incorrectly using amazon.com are ignored in favour of fixed amazon.in URLs.
+
+End-to-end local application refresh saved one real Amazon UK 7 observation to
+Supabase: INR 6,495, in stock, source time 2026-11-14T17:59:00.967Z. Independent
+read returned the same record. Nykaa's latest response was rejected for a future
+source timestamp; no Nykaa observation was saved and no timestamp was rewritten.
+There are four reviewed tracked pairs, with PUMA still pending article-level
+confirmation of a size-bearing listing. A black Nykaa PUMA candidate 24742421
+was found, but its generic retailer SKU does not establish 309452_01, so it
+was not promoted to an exact comparison.
+
+Validation: 45 Python and 14 TypeScript tests, Ruff, ESLint, source secret checks,
+and the Next production build passed. One upstream Starlette/httpx deprecation
+warning remains. No GitHub push or Vercel deployment performed for this change.

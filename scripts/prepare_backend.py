@@ -5,7 +5,17 @@ import shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-MODULES = ("__init__", "main", "settings", "storage", "providers", "service", "asics", "nike")
+MODULES = (
+    "__init__",
+    "main",
+    "settings",
+    "storage",
+    "providers",
+    "service",
+    "asics",
+    "nike",
+    "amazon",
+)
 
 
 def prepare(destination):

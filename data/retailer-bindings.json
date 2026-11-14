@@ -81,5 +81,55 @@
       "referenceUrl": "https://www.nike.in/nike-air-jordan-1-mid-se-men-s-shoes/p/24889618",
       "reviewedAt": "2026-11-14T17:28:06.826244+00:00"
     }
+  },
+  {
+    "shoeId": "nike-sb-alleyoop-black-white",
+    "brand": "Nike",
+    "article": "CJ0882-001",
+    "color": "Black / White / Black",
+    "edition": "SB Alleyoop",
+    "range": "adult",
+    "retailer": "Nykaa Fashion",
+    "listingId": "25302058",
+    "sizeSystem": "UK",
+    "verified": true,
+    "articleImageToken": "CJ0882001",
+    "sourceColor": "Black",
+    "sourceName": "Men's Sb Alleyoop Sneakers",
+    "currency": "INR",
+    "currencyEvidenceUrl": "https://www.nykaafashion.com/nike-sb-alleyoop-low-top-men-skateboard-shoes/p/25302058",
+    "evidence": {
+      "referenceUrl": "https://www.amazon.in/Nike-Alleyoop-Black-White-Black-Skateboarding/dp/B07Q4DLNJ3",
+      "skuReferenceUrl": "https://stockx.com/nike-sb-alleyoop-black-white",
+      "secondSkuReferenceUrl": "https://www.goat.com/en-ca/sneakers/sb-alleyoop-balck-white-cj0882-001",
+      "reviewedAt": "2026-11-14T17:53:15.173541+00:00",
+      "note": "User screenshot identifies the desired adult SB Alleyoop Black/White-Black. Independent retailer references identify this colourway as CJ0882-001; Nykaa source image repeats that article. No SKU was extracted from identifier 1624832.",
+      "articleImageUrl": "https://adn-static1.nykaa.com/nykdesignstudio-images/pub/media/catalog/product/9/f/9f4af02CJ0882001_1.jpg?rnd=20200526195200"
+    }
+  },
+  {
+    "shoeId": "nike-sb-alleyoop-black-white",
+    "brand": "Nike",
+    "article": "CJ0882-001",
+    "color": "Black / White / Black",
+    "edition": "SB Alleyoop",
+    "range": "adult",
+    "retailer": "Amazon.in",
+    "listingId": "B07Q5G672R",
+    "sizeSystem": "UK",
+    "verified": true,
+    "parentAsin": "B0GF9LHWZC",
+    "sizeDescriptor": "7 UK",
+    "colorDescriptor": "BLACK/WHITE-BLACK",
+    "sourceTitle": "Nike Men's SB Alleyoop Sneakers",
+    "evidence": {
+      "referenceUrl": "https://www.amazon.in/Nike-Alleyoop-Black-White-Black-Skateboarding/dp/B07Q4DLNJ3",
+      "skuReferenceUrl": "https://stockx.com/nike-sb-alleyoop-black-white",
+      "secondSkuReferenceUrl": "https://www.goat.com/en-ca/sneakers/sb-alleyoop-balck-white-cj0882-001",
+      "reviewedAt": "2026-11-14T17:53:15.173541+00:00",
+      "note": "User screenshot identifies the desired adult SB Alleyoop Black/White-Black. Independent retailer references identify this colourway as CJ0882-001; Nykaa source image repeats that article. No SKU was extracted from identifier 1624832.",
+      "referenceAsin": "B07Q4DLNJ3",
+      "variantProof": "Amazon India family B0GF9LHWZC maps B07Q4DLNJ3 to UK 5 and B07Q5G672R to UK 7, both Black/White-Black. Every refresh validates selected ASIN, family, explicit dimensions, title and INR-marked price. The Amazon response does not expose a manufacturer article; that identity was manually cross-checked using the other sources."
+    }
   }
 ]

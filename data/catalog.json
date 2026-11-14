@@ -249,5 +249,21 @@
     "tone": "grey",
     "offers": [],
     "referenceUrl": "https://www.nike.in/nike-air-jordan-1-mid-se-men-s-shoes/p/24889618"
+  },
+  {
+    "id": "nike-sb-alleyoop-black-white",
+    "brand": "Nike",
+    "name": "Nike SB Alleyoop",
+    "color": "Black / White / Black",
+    "article": "CJ0882-001",
+    "edition": "SB Alleyoop",
+    "range": "adult",
+    "category": "Sneakers",
+    "styles": ["skate"],
+    "height": "Low",
+    "image": "/shoes/alleyoop-pilot.jpg",
+    "tone": "grey",
+    "offers": [],
+    "referenceUrl": "https://www.amazon.in/Nike-Alleyoop-Black-White-Black-Skateboarding/dp/B07Q4DLNJ3"
   }
 ]

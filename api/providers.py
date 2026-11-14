@@ -40,6 +40,7 @@ def safe_url(value, retailer):
         "Nykaa Fashion": "nykaafashion.com",
         "ASICS India": "asics.co.in",
         "Nike India": "nike.in",
+        "Amazon.in": "amazon.in",
     }.get(retailer)
     if host is None:
         return None
@@ -222,7 +223,7 @@ class RetailerClient:
         self.key, self.transport = key, transport
 
     async def request(self, retailer, operation, **params):
-        path = RETAILERS[retailer]
+        path = {**RETAILERS, "Amazon.in": "amazon"}[retailer]
         async with httpx.AsyncClient(
             timeout=15, transport=self.transport, follow_redirects=False
         ) as client:
@@ -246,6 +247,11 @@ class RetailerClient:
             from api.nike import fetch_product
 
             return await fetch_product(binding, self.transport)
+        if binding["retailer"] == "Amazon.in":
+            from api.amazon import product_payload, source_url
+
+            raw = await self.request("Amazon.in", "product", url=source_url(binding), domain="in")
+            return product_payload(raw, binding)
         parameter = "url" if binding["retailer"] == "Nykaa Fashion" else "id"
         return await self.request(
             binding["retailer"], "product", **{parameter: binding["listingId"]}

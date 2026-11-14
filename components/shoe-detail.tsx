@@ -92,7 +92,7 @@ export default function ShoeDetail({
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Official product reference <ArrowUpRight size={14} />
+                Original product reference <ArrowUpRight size={14} />
               </a>
             )}
             <label className="detail-size">
