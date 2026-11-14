@@ -10,13 +10,13 @@ Drafts are not submitted and earn no points.
 The server-only POST `/api/search` supports API.SH Myntra and Nykaa Fashion search.
 Set `APISH_KEY` and a separate `PILOT_ACCESS_TOKEN` in the server environment.
 Enter only the pilot access token in the search dialog, never the provider key.
-Authenticated provider responses have not been tested. Search listings remain
+Authenticated provider searches and four detail responses have been tested. Search listings remain
 unconfirmed for exact model, colour and size. Retailer links use allowed HTTPS hosts.
 
-Next.js route handlers provide the connectors without a second deployment.
-FastAPI and SQLAlchemy remain optional backlog work. Durable SQLite observations
-are available locally; Supabase REST persistence and an additive SQL migration are
-provided for hosting. Hosted Supabase is not configured or authenticated-tested.
+Python/FastAPI owns retailer connectors and storage. Next route handlers are thin
+same-origin proxies to `LACERELAY_API_URL`. A separate Python service is now required.
+Python SQLite preserves existing tables and snapshot hashes. Supabase REST uses the
+existing additive SQL migration. Hosted Supabase is not authenticated-tested.
 Manual retailer bindings explicitly fix article, colourway, edition and range.
 Size-detail normalization records every supplied priced variant and preserves
 unknown sizes. Bare labels are accepted only for mappings with a verified UK
@@ -33,7 +33,8 @@ Latest stock evidence per retailer variant supersedes older stock evidence.
 
 ## Develop and verify
 
-Node.js 24+ and pnpm required. Run `pnpm install` and `pnpm dev`.
+Node.js 24+, pnpm and Python 3.12+ required. Start FastAPI as documented in api/README.md,
+then run `pnpm dev`. Python tests and lint are required alongside frontend checks.
 Run `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm test:security`,
 `pnpm audit --prod`, and `pnpm build` before release.
 

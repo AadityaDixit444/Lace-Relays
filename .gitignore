@@ -9,3 +9,8 @@ test-results/
 *.tsbuildinfo
 *.log
 .data/
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+.ruff_cache/

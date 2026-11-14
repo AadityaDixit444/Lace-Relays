@@ -22,6 +22,9 @@ enabled. The site explicitly labels sample offers and charts. See IMPLEMENTATION
 
 ## Vercel deployment
 
+This deployment section describes the original pilot. Later backend changes are
+local until explicitly reviewed and published.
+
 - Production: https://lace-relays.vercel.app
 - Deployment `dpl_YE1XnKwxsueHtGtDmdGsXkRvw1LU` reached READY.
 - Authenticated deployment HTTP check returned 200 with the expected headers.
@@ -54,3 +57,16 @@ The initial release above is historical context. These additions are local on
 - Real retailer-data flows verified: **none**. No provider credentials, verified
   retailer bindings or hosted database credentials were available. No fixture
   observations are imported by app code, and production hides fixture rows.
+
+## Python/FastAPI migration
+
+- Frontend APIs are thin proxies; retailer orchestration and SQLite/Supabase
+  persistence have moved to Python. No competing TS backend fallback remains.
+- Python checks cover auth, validation, bounded bodies, partial source failures,
+  coalescing/cache, size-level normalization, legacy null sizes, timestamp expiry,
+  storage persistence/deduplication, Supabase payload filtering and old Node hash
+  compatibility. Frontend checks retain comparison/discovery/history coverage.
+- Real searches and detail field inspection succeeded; see LIVE_DATA_CHECK.md.
+  Exact cross-store matching and hosted Supabase access remain unverified.
+- Python tests currently emit one upstream Starlette TestClient/httpx deprecation
+  warning. The HTTPX backend requests and tests pass; it is not a failed check.

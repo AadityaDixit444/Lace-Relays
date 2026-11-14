@@ -1,11 +1,17 @@
 import fs from "node:fs";
 import path from "node:path";
+import { spawnSync } from "node:child_process";
+import { parseEnv } from "node:util";
 const ignored = new Set([
   ".git",
   "node_modules",
   ".next",
   ".vercel",
   ".data",
+  ".venv",
+  "__pycache__",
+  ".pytest_cache",
+  ".ruff_cache",
   "test-results",
   "playwright-report",
 ]);
@@ -26,11 +32,28 @@ function walk(dir) {
       walk(file);
       continue;
     }
-    if (item.name.startsWith(".env") && item.name !== ".env.example") {
-      problems.push(`${file}: environment file present; ensure ignored`);
+    if (item.name === ".env.example") {
+      const template = parseEnv(fs.readFileSync(file, "utf8"));
+      for (const name of [
+        "APISH_KEY",
+        "PILOT_ACCESS_TOKEN",
+        "SUPABASE_SERVICE_ROLE_KEY",
+      ])
+        if (template[name])
+          problems.push(`${file}: ${name} must remain an empty placeholder`);
       continue;
     }
-    if (!/\.(tsx?|m?js|json|md|ya?ml|css|sql)$/.test(file)) continue;
+    if (item.name.startsWith(".env") && item.name !== ".env.example") {
+      // Local server credentials are expected, but must never be tracked.
+      const { status } = spawnSync(
+        "git",
+        ["ls-files", "--error-unmatch", "--", file],
+        { stdio: "ignore" },
+      );
+      if (status === 0) problems.push(`${file}: environment file is tracked`);
+      continue;
+    }
+    if (!/\.(tsx?|m?js|json|md|ya?ml|css|sql|py)$/.test(file)) continue;
     const contents = fs.readFileSync(file, "utf8");
     checked++;
     if (patterns.some((p) => p.test(contents)))

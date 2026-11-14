@@ -6,7 +6,6 @@ import {
   safeRetailerUrl,
   type Offer,
 } from "../lib/comparison";
-import { normalizeProducts } from "../lib/providers";
 const now = Date.parse("2026-11-14T10:00:00Z");
 const base: Offer = {
   id: "a",
@@ -87,50 +86,4 @@ test("unsafe retailer URLs are rejected", () => {
   ])
     assert.equal(safeRetailerUrl(url, "Myntra"), null);
   assert.ok(safeRetailerUrl("https://www.myntra.com/123/buy", "Myntra"));
-});
-test("search sizes do not prove size-level stock", () => {
-  const r = normalizeProducts(
-    {
-      cached: true,
-      products: [
-        {
-          id: 1,
-          name: "Samba",
-          price: 7499,
-          url: "https://www.myntra.com/1/buy",
-          sizes: ["7"],
-          in_stock: true,
-        },
-      ],
-    },
-    "Myntra",
-  );
-  assert.equal(r[0].sizeStatus, "unconfirmed");
-  assert.equal(r[0].observedAt, null);
-});
-test("malformed, foreign currency and unsafe listings rejected", () => {
-  assert.deepEqual(
-    normalizeProducts(
-      {
-        products: [
-          null,
-          { name: "Samba", price: 10, url: "https://evil.test" },
-          {
-            name: "Samba",
-            price: 10,
-            url: "https://www.myntra.com/a",
-            currency: "USD",
-          },
-          {
-            name: "Samba",
-            price: 10,
-            url: "https://www.myntra.com/a",
-            in_stock: false,
-          },
-        ],
-      },
-      "Myntra",
-    ),
-    [],
-  );
 });

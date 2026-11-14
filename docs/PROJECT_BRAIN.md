@@ -10,6 +10,9 @@ each GitHub push and before publishing to `main`.
 ## Current implementation
 
 - Next.js/React/TypeScript/Tailwind; shared ProductCard, catalogue and sizing.
+- Backend decision explicitly reconfirmed: Python + FastAPI. Next API routes only
+  proxy; Python handles source requests, authentication, caching and persistence.
+  Canonical catalogue metadata is shared JSON. Client-side presentation stays TS.
 - Seven manually tagged style looks, independent ankle height, OR look matching
   and AND size/budget filtering. A shoe appears once. URL state survives returning
   from detail. No stock-confirmed offer means it cannot pass a size or budget filter.
@@ -27,13 +30,15 @@ each GitHub push and before publishing to `main`.
 
 ## Limits and evidence
 
-No authenticated retailer or hosted Supabase flow is verified yet. There are no
-credentials or verified retailer bindings in this checkout. Fixtures are in tests,
+Authenticated searches for the user's five requests and four retailer detail
+responses succeeded. The local Next → FastAPI → both retailers search returned
+24 unconfirmed Alleyoop candidates. Hosted Supabase and exact cross-store identity
+remain unverified. Secrets belong only in ignored local/server configuration. Fixtures are in tests,
 opt-in locally and hidden in production. The homepage preview is not a source of
 observations. See VERIFICATION.md for tests and IMPLEMENTATION.md for setup.
 
 ## Backlog boundary
 
 Accounts, synced watchlists, alerts, real trending metrics, community moderation,
-points/redemption, extra retailers and a separate FastAPI service remain backlog.
+points/redemption, extra retailers and distributed quota enforcement remain backlog.
 No rewards, popularity metrics or savings claims should be invented.

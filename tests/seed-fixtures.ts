@@ -1,19 +1,13 @@
-import { saveObservations } from "../lib/storage";
+import { spawnSync } from "node:child_process";
+import { resolve } from "node:path";
 import { journeyFixtures } from "./fixtures";
-if (
-  process.env.NODE_ENV === "production" ||
-  process.env.SHOW_TEST_FIXTURES !== "1"
-)
-  throw new Error(
-    "Fixture seeding is only allowed in an explicitly enabled local test environment.",
-  );
-saveObservations(journeyFixtures())
-  .then(() =>
-    console.log(
-      "Labelled test fixtures seeded into the selected local database. These are not retailer prices.",
-    ),
-  )
-  .catch(() => {
-    console.error("Fixture seeding failed");
-    process.exitCode = 1;
-  });
+const python = resolve(
+  process.platform === "win32"
+    ? ".venv/Scripts/python.exe"
+    : ".venv/bin/python",
+);
+const result = spawnSync(python, ["-m", "api.seed_fixtures"], {
+  input: JSON.stringify(journeyFixtures()),
+  stdio: ["pipe", "inherit", "inherit"],
+});
+process.exitCode = result.status ?? 1;

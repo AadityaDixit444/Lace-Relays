@@ -1,0 +1,7 @@
+[
+  { "query": "Nike Alleyoop", "sizeUk": 7 },
+  { "query": "Nike Precision 8 Low Basketball Shoes", "sizeUk": 7 },
+  { "query": "Nike Air Jordan", "sizeUk": 7, "needsEditionSelection": true },
+  { "query": "PUMA McLaren Speedcat", "sizeUk": 7 },
+  { "query": "ASICS Classic CT S Sneakers", "sizeUk": 7 }
+]
