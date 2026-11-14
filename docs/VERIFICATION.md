@@ -19,3 +19,13 @@
 
 Live data, durable history, accounts, community review and funded rewards are not
 enabled. The site explicitly labels sample offers and charts. See IMPLEMENTATION.md.
+
+## Vercel deployment
+
+- Production: https://lace-relays.vercel.app
+- Deployment `dpl_YE1XnKwxsueHtGtDmdGsXkRvw1LU` reached READY.
+- Authenticated deployment HTTP check returned 200 with the expected headers.
+- Project Vercel authentication is configured for all deployments (`all`).
+- The automation bypass created by `vercel curl` was revoked and verified absent.
+- GitHub auto-linking is not configured: the Vercel account needs a GitHub login
+  connection. Deployment used the CLI; no GitHub push was performed.

@@ -2,6 +2,8 @@
 
 A shoe price comparison and discovery platform.
 
+Deployment: https://lace-relays.vercel.app (Vercel sign-in required).
+
 ## Project Status
 
 Approved Template A is implemented as a private web pilot. Live provider access,
