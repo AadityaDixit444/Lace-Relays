@@ -29,3 +29,28 @@ enabled. The site explicitly labels sample offers and charts. See IMPLEMENTATION
 - The automation bypass created by `vercel curl` was revoked and verified absent.
 - GitHub auto-linking is not configured: the Vercel account needs a GitHub login
   connection. Deployment used the CLI; no GitHub push was performed.
+
+## Visual discovery / Size Tax / all-size history iteration
+
+The initial release above is historical context. These additions are local on
+`develop`, not deployed or pushed as part of this iteration.
+
+- Browser fixture journey: Terrace + Skate → Low → UK 7 → ₹6,000 returned two
+  unique matches. A lower price in another size did not qualify the Samba.
+- Opened Palermo, compared stores, changed UK 7 to UK 8 and saw Size Tax change
+  from ₹1,500 to ₹2,500 in the labelled fixture dataset.
+- Compared UK 7 and UK 8 history, inspected Myntra/variant/timestamp evidence,
+  and opened the all-size table. It scrolls inside its container on mobile.
+- Returning to browsing preserved look, height, size and budget filters. Setting
+  a ₹100 budget showed zero results; removing that chip restored results.
+- Typed Dunk search on mobile and Samba search on desktop returned expected pairs.
+  Desktop 1440px, mobile 390px and 320px geometry checks found no page overflow.
+- Automated cases cover OR/AND filters, duplicate tags, half sizes, ties,
+  unavailable and one-size states, expired/conditional/ambiguous offers, India-day
+  aggregation, missing days, single points, later sold-out updates, all-size
+  ingestion, durable reopen/deduplication, null legacy sizes and retailer timeout.
+- SQLite persistence is exercised with isolated temporary databases. Supabase
+  REST is tested with mocked responses; the hosted SQL migration is not applied.
+- Real retailer-data flows verified: **none**. No provider credentials, verified
+  retailer bindings or hosted database credentials were available. No fixture
+  observations are imported by app code, and production hides fixture rows.

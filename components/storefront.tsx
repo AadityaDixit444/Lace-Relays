@@ -16,7 +16,16 @@ import {
   ShieldCheck,
   ExternalLink,
 } from "lucide-react";
-import { shoes, money, ukSizes, type Shoe } from "@/lib/catalog";
+import {
+  previewShoes as shoes,
+  shoes as catalogShoes,
+  money,
+  ukSizes,
+  type Shoe,
+} from "@/lib/catalog";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { ProductCard } from "./product-card";
 import type { Listing } from "@/lib/providers";
 import { compareOffers } from "@/lib/comparison";
 
@@ -37,6 +46,7 @@ function Brand() {
 }
 
 export default function Storefront() {
+  const router = useRouter();
   const [size, setSize] = useState(7),
     [selected, setSelected] = useState(shoes[0]),
     [panel, setPanel] = useState<Panel>(null),
@@ -52,13 +62,17 @@ export default function Storefront() {
     [sourceNote, setSourceNote] = useState("");
   const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("search") === "1") {
+      // Honour the shared header's search link after hydration.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setPanel("search");
+    }
     try {
       const stored = JSON.parse(
         localStorage.getItem("lacerelay-saved") || "[]",
       );
       if (Array.isArray(stored)) {
         // Restore device-local preferences after hydration.
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSaved(
           stored.filter(
             (id: unknown) =>
@@ -98,7 +112,7 @@ export default function Storefront() {
   }, []);
   const results = useMemo(
     () =>
-      shoes.filter((s) =>
+      catalogShoes.filter((s) =>
         `${s.name} ${s.color} ${s.article}`.toLowerCase().includes(
           query
             .toLowerCase()
@@ -141,13 +155,7 @@ export default function Storefront() {
   function pick(shoe: Shoe) {
     setSelected(shoe);
     setPanel(null);
-    setTimeout(
-      () =>
-        document
-          .getElementById("comparison")
-          ?.scrollIntoView({ behavior: "smooth", block: "center" }),
-      80,
-    );
+    router.push(`/shoes/${shoe.id}?size=${size}`);
   }
   function openSearch() {
     setError("");
@@ -230,6 +238,9 @@ export default function Storefront() {
             <a href="#community">Community</a>
           </nav>
           <div className="header-actions">
+            <Link href="/browse" className="browse-entry">
+              Browse by style
+            </Link>
             <button
               className="search-trigger"
               aria-label="Search sneakers"
@@ -376,46 +387,17 @@ export default function Storefront() {
                     : true,
               )
               .map((shoe, i) => (
-                <article className="product-card" key={shoe.id}>
-                  <div className={`product-image ${shoe.tone}`}>
-                    <button
-                      className="product-open"
-                      onClick={() => pick(shoe)}
-                      aria-label={`Compare ${shoe.name}`}
-                    >
-                      <img
-                        src={shoe.image}
-                        width="800"
-                        height="480"
-                        alt={`${shoe.name}, ${shoe.color}`}
-                        loading="lazy"
-                      />
-                      <span className="card-action">
-                        Compare pair <ArrowUpRight size={16} />
-                      </span>
-                    </button>
-                    <button
-                      className={`save-button ${saved.includes(shoe.id) ? "is-saved" : ""}`}
-                      aria-label={`${saved.includes(shoe.id) ? "Unsave" : "Save"} ${shoe.name}`}
-                      aria-pressed={saved.includes(shoe.id)}
-                      onClick={() => toggleSave(shoe)}
-                    >
-                      <Bookmark
-                        size={14}
-                        fill={saved.includes(shoe.id) ? "currentColor" : "none"}
-                      />
-                    </button>
-                    <span className="card-index">0{i + 1}</span>
-                  </div>
-                  <div className="product-info">
-                    <button onClick={() => pick(shoe)}>{shoe.name}</button>
-                    <p>{shoe.color}</p>
-                    <div className="product-price">
-                      <strong>{money(shoe.price)}</strong>
-                      <span>at {shoe.retailer}</span>
-                    </div>
-                  </div>
-                </article>
+                <ProductCard
+                  key={shoe.id}
+                  shoe={shoe}
+                  index={i}
+                  onPick={() => pick(shoe)}
+                  saved={saved.includes(shoe.id)}
+                  onSave={() => toggleSave(shoe)}
+                  price={shoe.price}
+                  retailer={shoe.retailer}
+                  preview
+                />
               ))}
           </div>
           {filter === "Saved" && !saved.length && (

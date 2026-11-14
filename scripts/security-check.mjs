@@ -5,6 +5,7 @@ const ignored = new Set([
   "node_modules",
   ".next",
   ".vercel",
+  ".data",
   "test-results",
   "playwright-report",
 ]);
@@ -29,7 +30,7 @@ function walk(dir) {
       problems.push(`${file}: environment file present; ensure ignored`);
       continue;
     }
-    if (!/\.(tsx?|m?js|json|md|ya?ml|css)$/.test(file)) continue;
+    if (!/\.(tsx?|m?js|json|md|ya?ml|css|sql)$/.test(file)) continue;
     const contents = fs.readFileSync(file, "utf8");
     checked++;
     if (patterns.some((p) => p.test(contents)))

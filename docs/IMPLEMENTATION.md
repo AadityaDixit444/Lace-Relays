@@ -1,8 +1,9 @@
 # LaceRelay private pilot
 
-Template A is implemented in Next.js/React/TypeScript and Tailwind CSS. Collection
-prices, availability, rankings and charts are explicitly illustrative. Bookmarks
-and deal drafts stay in localStorage. Drafts are not submitted and earn no points.
+Template A is implemented in Next.js/React/TypeScript and Tailwind CSS. The existing
+homepage collection and chart remain illustrative. New `/browse` and `/shoes/[id]`
+views read stored observations only. Bookmarks and deal drafts stay in localStorage.
+Drafts are not submitted and earn no points.
 
 ## Live discovery
 
@@ -12,17 +13,27 @@ Enter only the pilot access token in the search dialog, never the provider key.
 Authenticated provider responses have not been tested. Search listings remain
 unconfirmed for exact model, colour and size. Retailer links use allowed HTTPS hosts.
 
-Next.js route handlers provide initial connectors without a second deployment.
-The proposed FastAPI/SQLAlchemy/Supabase service is not implemented yet. Before a
-public live launch, add durable observations, curated article/colourway matching,
-size-detail verification, distributed rate limits and provider-credit accounting.
+Next.js route handlers provide the connectors without a second deployment.
+FastAPI and SQLAlchemy remain optional backlog work. Durable SQLite observations
+are available locally; Supabase REST persistence and an additive SQL migration are
+provided for hosting. Hosted Supabase is not configured or authenticated-tested.
+Manual retailer bindings explicitly fix article, colourway, edition and range.
+Size-detail normalization records every supplied priced variant and preserves
+unknown sizes. Bare labels are accepted only for mappings with a verified UK
+size system. Missing size prices are not copied from a model-level price.
+Before public live launch, configure real bindings, verify source responses and
+add distributed rate limits and provider-credit accounting.
 The current cache, request coalescing and 50-query cap are per server instance,
 not global quota protection. Live access is token-gated for private pilot use.
-Real price history requires persistent observations; the chart is a sample only.
+Real history requires recorded observations. Detail history aggregates India-day
+lows, shows gaps and sold-out states separately, and exposes retailer/timestamp
+evidence. No interpolated values or fabricated days are stored. New comparisons,
+budget filtering and Size Tax share the same exact-identity eligibility functions.
+Latest stock evidence per retailer variant supersedes older stock evidence.
 
 ## Develop and verify
 
-Node.js 20.9+ and pnpm required. Run `pnpm install` and `pnpm dev`.
+Node.js 24+ and pnpm required. Run `pnpm install` and `pnpm dev`.
 Run `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm test:security`,
 `pnpm audit --prod`, and `pnpm build` before release.
 
@@ -31,7 +42,9 @@ Run `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm test:security`,
 Import the repository or run `pnpm dlx vercel --prod` after authentication.
 Use the repository root and Next.js preset. No variables are required for the
 design preview. Keep the deployment protected for the private pilot. Enable live
-discovery only after setting both server variables and verifying actual responses.
+discovery only after configuring server variables, applying the database migration,
+verifying canonical retailer bindings and testing authenticated responses. Production
+never serves fixture rows or uses local SQLite as persistent hosting storage.
 
 ## Image provenance
 

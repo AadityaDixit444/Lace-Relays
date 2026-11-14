@@ -1,3 +1,4 @@
+import type { StyleId, Height } from "./styles";
 export type Shoe = {
   id: string;
   brand: string;
@@ -8,6 +9,11 @@ export type Shoe = {
   price: number;
   retailer: string;
   tone: string;
+  category: "Sneakers";
+  styles: StyleId[];
+  height: Height;
+  edition: string;
+  range: "adult" | "kids";
   offers: {
     retailer: string;
     price: number;
@@ -16,9 +22,14 @@ export type Shoe = {
     sizes: number[];
   }[];
 };
-export const shoes: Shoe[] = [
+export const previewShoes: Shoe[] = [
   {
     id: "samba-og",
+    category: "Sneakers",
+    styles: ["terrace", "skate"],
+    height: "Low",
+    edition: "OG",
+    range: "adult",
     brand: "adidas",
     name: "adidas Samba OG",
     color: "Cloud White / Core Black",
@@ -53,6 +64,11 @@ export const shoes: Shoe[] = [
   },
   {
     id: "dunk-low",
+    category: "Sneakers",
+    styles: ["retro-court", "basketball"],
+    height: "Low",
+    edition: "Low Retro",
+    range: "adult",
     brand: "Nike",
     name: "Nike Dunk Low Retro",
     color: "White / Black",
@@ -80,6 +96,11 @@ export const shoes: Shoe[] = [
   },
   {
     id: "nb-530",
+    category: "Sneakers",
+    styles: ["retro-running"],
+    height: "Low",
+    edition: "530",
+    range: "adult",
     brand: "New Balance",
     name: "New Balance 530",
     color: "White / Natural Indigo",
@@ -107,6 +128,11 @@ export const shoes: Shoe[] = [
   },
   {
     id: "palermo",
+    category: "Sneakers",
+    styles: ["terrace", "retro-court"],
+    height: "Low",
+    edition: "OG",
+    range: "adult",
     brand: "PUMA",
     name: "PUMA Palermo OG",
     color: "Archive Green / Warm White",
@@ -131,6 +157,77 @@ export const shoes: Shoe[] = [
         sizes: [6, 7, 8, 9, 10, 11],
       },
     ],
+  },
+];
+export const shoes: Shoe[] = [
+  ...previewShoes,
+  {
+    id: "old-skool",
+    brand: "Vans",
+    name: "Vans Old Skool",
+    color: "Black / White",
+    article: "VN000D3HY28",
+    edition: "Old Skool",
+    range: "adult",
+    category: "Sneakers",
+    styles: ["skate"],
+    height: "Low",
+    image: "/shoes/skate.jpg",
+    tone: "grey",
+    price: 0,
+    retailer: "",
+    offers: [],
+  },
+  {
+    id: "jordan-1-mid",
+    brand: "Jordan",
+    name: "Air Jordan 1 Mid",
+    color: "Light Smoke Grey",
+    article: "554724-092",
+    edition: "Mid",
+    range: "adult",
+    category: "Sneakers",
+    styles: ["basketball", "retro-court"],
+    height: "Mid",
+    image: "/shoes/basketball.jpg",
+    tone: "lilac",
+    price: 0,
+    retailer: "",
+    offers: [],
+  },
+  {
+    id: "achilles-low",
+    brand: "Common Projects",
+    name: "Original Achilles Low",
+    color: "White",
+    article: "1528-0506",
+    edition: "Original",
+    range: "adult",
+    category: "Sneakers",
+    styles: ["minimal-leather"],
+    height: "Low",
+    image: "/shoes/minimal.jpg",
+    tone: "green",
+    price: 0,
+    retailer: "",
+    offers: [],
+  },
+  {
+    id: "xt-6",
+    brand: "Salomon",
+    name: "Salomon XT-6",
+    color: "Black / Phantom",
+    article: "L41086600",
+    edition: "XT-6",
+    range: "adult",
+    category: "Sneakers",
+    styles: ["trail", "retro-running"],
+    height: "Low",
+    image: "/shoes/trail.jpg",
+    tone: "blue",
+    price: 0,
+    retailer: "",
+    offers: [],
   },
 ];
 export const money = (value: number) =>
