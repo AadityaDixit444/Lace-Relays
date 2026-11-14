@@ -1,7 +1,52 @@
 [
-  { "query": "Nike Alleyoop", "sizeUk": 7 },
-  { "query": "Nike Precision 8 Low Basketball Shoes", "sizeUk": 7 },
-  { "query": "Nike Air Jordan", "sizeUk": 7, "needsEditionSelection": true },
-  { "query": "PUMA McLaren Speedcat", "sizeUk": 7 },
-  { "query": "ASICS Classic CT S Sneakers", "sizeUk": 7 }
+  {
+    "query": "Nike Alleyoop",
+    "sizeUk": 7,
+    "referenceUrl": "https://www.amazon.in/Nike-Alleyoop-Black-White-Black-Skateboarding/dp/B07Q4DLNJ3",
+    "referenceModel": "Nike Alleyoop",
+    "referenceArticle": null,
+    "referenceColor": "Black / White / Black",
+    "verificationStatus": "reference-only",
+    "verificationNote": "Amazon page could not be read; article code and UK 7 stock unverified."
+  },
+  {
+    "query": "Nike Precision 8 Low",
+    "sizeUk": 7,
+    "referenceUrl": "https://www.nike.in/nike-precision-8-low-men-s-basketball-shoes/p/27763049",
+    "referenceModel": "Nike Precision 8 Low",
+    "referenceArticle": "IH1104-003",
+    "referenceColor": "Black / White / Dusty Cactus",
+    "verificationStatus": "reference-only",
+    "verificationNote": "Reference identity read from product page; no verified provider mapping or UK 7 stock."
+  },
+  {
+    "query": "Air Jordan 1 Mid SE",
+    "sizeUk": 7,
+    "referenceUrl": "https://www.nike.in/nike-air-jordan-1-mid-se-men-s-shoes/p/24889618",
+    "referenceModel": "Air Jordan 1 Mid SE",
+    "referenceArticle": "IB7110-002",
+    "referenceColor": "Black / Light Wild Mango / Olive Grey",
+    "verificationStatus": "reference-only",
+    "verificationNote": "Reference identity read from product page; no verified provider mapping or UK 7 stock."
+  },
+  {
+    "query": "PUMA McLaren Racing Speedcat",
+    "sizeUk": 7,
+    "referenceUrl": "https://in.puma.com/in/en/pd/mclaren-racing-speedcat-sneakers/309452",
+    "referenceModel": "PUMA McLaren Racing Speedcat",
+    "referenceArticle": "309452",
+    "referenceColor": "PUMA Black / Bright Papaya",
+    "verificationStatus": "reference-only",
+    "verificationNote": "Base style identified; colour-specific article suffix and retailer mapping unverified."
+  },
+  {
+    "query": "ASICS Classic CT S",
+    "sizeUk": 7,
+    "referenceUrl": "https://www.asics.co.in/1201b069-300-classic-ct-s.html",
+    "referenceModel": "ASICS Classic CT S",
+    "referenceArticle": "1201B069.300",
+    "referenceColor": "VERDIGRIS / CREAM",
+    "verificationStatus": "reference-only",
+    "verificationNote": "Reference identity read from product page; no verified provider mapping or UK 7 stock."
+  }
 ]

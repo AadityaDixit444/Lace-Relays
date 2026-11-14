@@ -2573,3 +2573,139 @@ h2 {
     mask-image: none;
   }
 }
+
+.zoom-trigger {
+  width: 100%;
+  border: 0;
+  padding: 0;
+  cursor: zoom-in;
+}
+.zoom-trigger-label {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  padding: 9px 13px;
+  border-radius: 30px;
+  background: #fffffff0;
+  color: var(--ink);
+  font-size: 11px;
+  box-shadow: 0 2px 14px #00000008;
+}
+.product-zoom-dialog {
+  width: min(1200px, 94vw);
+  max-width: 94vw;
+  max-height: 92dvh;
+  overflow-y: auto;
+  margin: auto;
+  padding: 24px;
+  border: 1px solid #e4dce9;
+  border-radius: 16px;
+  background: #fff;
+  color: var(--ink);
+}
+.product-zoom-dialog::backdrop {
+  background: #17131dc9;
+}
+.zoom-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.zoom-header strong {
+  font-size: 17px;
+}
+.zoom-header p,
+.zoom-quality-note {
+  font-size: 12px;
+  color: #716a77;
+  line-height: 1.6;
+  margin-top: 7px;
+}
+.zoom-header button {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  background: #f3eff6;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.zoom-panes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.zoom-source,
+.zoom-result {
+  position: relative;
+  aspect-ratio: 5 / 3;
+  overflow: hidden;
+  background: #f0edf3;
+  border-radius: 10px;
+}
+.zoom-source {
+  cursor: crosshair;
+  touch-action: none;
+}
+.zoom-source img,
+.zoom-result img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  user-select: none;
+}
+.zoom-result img {
+  transform: scale(3) translate(var(--zoom-dx), var(--zoom-dy));
+}
+.zoom-lens {
+  position: absolute;
+  width: 33.333333%;
+  height: 33.333333%;
+  left: var(--zoom-x);
+  top: var(--zoom-y);
+  transform: translate(-50%, -50%);
+  background: #ffffff55;
+  border: 1px solid #ffffff;
+  box-shadow: 0 0 0 1px #44334b30;
+  pointer-events: none;
+}
+.zoom-badge {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: #ffffffe8;
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-size: 9px;
+  letter-spacing: 1.4px;
+}
+.zoom-trigger:focus-visible,
+.zoom-source:focus-visible,
+.zoom-header button:focus-visible {
+  outline: 2px solid #9162b2;
+  outline-offset: 3px;
+}
+.zoom-quality-note {
+  margin-bottom: 0;
+}
+@media (max-width: 640px) {
+  .product-zoom-dialog {
+    padding: 16px;
+  }
+  .zoom-panes {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .zoom-header strong {
+    font-size: 14px;
+  }
+}

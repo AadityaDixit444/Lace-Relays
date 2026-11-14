@@ -36,3 +36,13 @@ no hosted database access was claimed, and local storage remains SQLite.
 The original SQL migration remains available. Apply it via the Supabase SQL editor
 if the table is absent. Do not expose a general-purpose execute-SQL RPC to work
 around missing management/database credentials.
+
+## Selected product references and image zoom
+
+The five user-selected links and UK 7 preference are recorded in `data/pilot-requests.json`. Nike Precision 8 Low IH1104-003, Air Jordan 1 Mid SE IB7110-002, and ASICS Classic CT S 1201B069.300 have reference-page identity evidence. PUMA 309452 has Black-Bright Papaya on the reference page but needs the colour-specific suffix. The Amazon Alleyoop page could not be read. Neither Nike product ID resolved successfully through the Nykaa provider during this check; a shared numeric ID is not proof of a matching provider listing.
+
+These are reference selections, not verified retailer bindings. `data/retailer-bindings.json` remains empty. No prices or size availability were copied from crawled pages into live observations, and no production observations were inserted. Cross-store article, colourway, edition and UK 7 evidence must be verified before enabling comparison.
+
+Product detail pages now include a keyboard-accessible native image dialog, a movable 3x lens and a separate magnified pane. Desktop users move the pointer; touch users tap to open and drag the source; arrow keys move the lens. Escape and the close button dismiss the modal. Images reuse existing assets; resolution limits apply. Multi-angle thumbnails require real additional photographs and are not fabricated.
+
+Verification: Supabase migration is now applied. FastAPI `/health` and `/shoes/samba-og` returned HTTP 200 in Supabase mode, and the Next.js `/api/shoes/samba-og` proxy returned HTTP 200 after correcting the local `LACERELAY_API_URL`. No credentials were changed or committed. The mobile-width browser check confirmed that the magnifier dialog opens, shows source and enlarged panes, accepts keyboard focus, and closes with Escape. Frontend tests (11), backend tests (8), lint, production build and source security scan passed; the Python test client has an upstream deprecation warning. Touch hardware dragging and desktop pointer tracking were not manually exercised.

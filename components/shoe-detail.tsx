@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, Info } from "lucide-react";
@@ -15,6 +14,7 @@ import { filterQuery } from "@/lib/browse-state";
 import { useObservations } from "./use-observations";
 import { SiteHeader } from "./site-header";
 import { PriceHistory } from "./price-history";
+import { ProductZoom } from "./product-zoom";
 export default function ShoeDetail({
   shoe,
   filters,
@@ -69,14 +69,11 @@ export default function ShoeDetail({
           <ArrowLeft size={15} /> Back to your looks
         </Link>
         <div className="detail-top">
-          <div className={`detail-image product-image ${shoe.tone}`}>
-            <img
-              src={shoe.image}
-              alt={`${shoe.name}, ${shoe.color}`}
-              width="800"
-              height="480"
-            />
-          </div>
+          <ProductZoom
+            src={shoe.image}
+            alt={`${shoe.name}, ${shoe.color}`}
+            tone={shoe.tone}
+          />
           <div>
             <div className="eyebrow">Exact pair / {shoe.article}</div>
             <h1 className="detail-title">{shoe.name}</h1>
