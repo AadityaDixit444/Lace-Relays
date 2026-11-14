@@ -253,3 +253,65 @@ def test_python_reads_existing_typescript_sqlite_snapshot_without_duplicate(sett
     store = Store(settings)
     asyncio.run(store.save([row]))
     assert len(asyncio.run(store.read())) == 1
+
+
+@pytest.mark.asyncio
+async def test_product_connectors_use_retailer_specific_lookup_parameters():
+    seen = []
+
+    def handler(request):
+        seen.append((request.url.path, dict(request.url.params)))
+        return httpx.Response(200, json={"id": "42"})
+
+    provider = RetailerClient("fixture", httpx.MockTransport(handler))
+    await provider.detail(dict(retailer="Nykaa Fashion", listingId="42"))
+    await provider.detail(dict(retailer="Myntra", listingId="42"))
+    assert seen == [
+        ("/nykaafashion/v1/product", {"url": "42"}),
+        ("/myntra/v1/product", {"id": "42"}),
+    ]
+
+
+def test_reviewed_article_evidence_rejects_neighbour_colour_and_currency_drift():
+    shoe = dict(SHOE, brand="ASICS", article="1201B069.300", color="Verdigris / Cream")
+    url = "https://www.nykaafashion.com/asics-classic-ct-s-aqua-sneakers/p/42"
+    binding = dict(
+        BINDING,
+        brand=shoe["brand"],
+        article=shoe["article"],
+        color=shoe["color"],
+        retailer="Nykaa Fashion",
+        listingId="42",
+        articleImageToken="1201B069.300",
+        sourceColor="Aqua",
+        sourceName="CLASSIC CT S Aqua Sneakers",
+        currency="INR",
+        currencyEvidenceUrl=url,
+    )
+    payload = dict(
+        PAYLOAD,
+        id="42",
+        brand="ASICS",
+        name="CLASSIC CT S Aqua Sneakers",
+        color="Aqua",
+        currency=None,
+        url=url,
+        images=["https://adn-static1.nykaa.com/product/hash1201B069.300_1.jpg"],
+    )
+    retrieved = datetime.fromtimestamp(NOW, UTC).isoformat()
+    result, limitation = normalize_detail(payload, binding, shoe, retrieved)
+    assert result[0]["size"] == 7 and result[0]["currency"] == "INR" and limitation is None
+    for change in [
+        {"color": "Green"},
+        {"name": "Different model"},
+        {"images": ["https://adn-static1.nykaa.com/product/hash1201B069.301_1.jpg"]},
+        {"images": ["https://adn-static1.nykaa.com/product/hash1201B069.3000_1.jpg"]},
+        {"images": []},
+        {"brand": None},
+    ]:
+        assert normalize_detail(dict(payload, **change), binding, shoe, retrieved)[0] == []
+    # A recorded INR page can fill an absent currency but cannot override a source contradiction.
+    explicit, _ = normalize_detail(dict(payload, currency="USD"), binding, shoe, retrieved)
+    assert explicit[0]["currency"] == "USD"
+    unknown, _ = normalize_detail(payload, dict(binding, currencyEvidenceUrl=""), shoe, retrieved)
+    assert unknown[0]["currency"] == "unknown"

@@ -201,5 +201,21 @@
     "price": 0,
     "retailer": "",
     "offers": []
+  },
+  {
+    "id": "asics-classic-ct-s-verdigris",
+    "brand": "ASICS",
+    "name": "ASICS Classic CT S",
+    "color": "Verdigris / Cream",
+    "article": "1201B069.300",
+    "edition": "Classic CT S",
+    "range": "adult",
+    "category": "Sneakers",
+    "styles": ["minimal-leather"],
+    "height": "Low",
+    "image": "/shoes/asics-classic-ct-s.jpg",
+    "tone": "green",
+    "offers": [],
+    "referenceUrl": "https://www.asics.co.in/1201b069-300-classic-ct-s.html"
   }
 ]

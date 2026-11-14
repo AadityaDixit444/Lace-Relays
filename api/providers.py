@@ -5,7 +5,7 @@ import json
 import math
 import re
 from datetime import UTC, datetime
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 import httpx
 
@@ -114,6 +114,36 @@ def normalize_detail(data, binding, shoe, retrieved_at):
     url = safe_url(data.get("url"), binding["retailer"])
     if not url:
         return [], "Invalid retailer URL."
+    # Reviewed mappings can require source evidence on every refresh. A similar
+    # model name or a neighbouring colour code must never reuse the mapping.
+    image_token = binding.get("articleImageToken")
+    if image_token:
+        images = data.get("images")
+        if (
+            code(image_token) != code(binding["article"])
+            or not isinstance(images, list)
+            or not any(
+                isinstance(image, str)
+                and re.search(
+                    re.escape(image_token) + r"(?=[_\-./]|$)",
+                    unquote(urlparse(image).path),
+                    re.IGNORECASE,
+                )
+                for image in images
+            )
+            or code(str(data.get("brand", ""))) != code(binding["brand"])
+            or code(str(data.get("color", data.get("colour", ""))))
+            != code(binding.get("sourceColor", ""))
+            or code(str(data.get("name", ""))) != code(binding.get("sourceName", ""))
+        ):
+            return [], "Source article, colour or model evidence changed; mapping needs review."
+    currency = data.get("currency")
+    if currency is None:
+        currency = (
+            binding["currency"]
+            if binding.get("currency") == "INR" and binding.get("currencyEvidenceUrl") == url
+            else "unknown"
+        )
     source_time = (
         data.get("fetched_at") if math.isfinite(timestamp(data.get("fetched_at"))) else None
     )
@@ -148,7 +178,7 @@ def normalize_detail(data, binding, shoe, retrieved_at):
             retailer=binding["retailer"],
             size=size,
             pricePaise=round(price * 100),
-            currency=data.get("currency", "unknown"),
+            currency=currency,
             stock="in_stock"
             if available is True
             else "out_of_stock"
@@ -201,4 +231,7 @@ class RetailerClient:
         return normalize_search(await self.request(retailer, "search", q=query), retailer)
 
     async def detail(self, binding):
-        return await self.request(binding["retailer"], "product", id=binding["listingId"])
+        parameter = "url" if binding["retailer"] == "Nykaa Fashion" else "id"
+        return await self.request(
+            binding["retailer"], "product", **{parameter: binding["listingId"]}
+        )

@@ -7,8 +7,9 @@ export type Shoe = {
   color: string;
   article: string;
   image: string;
-  price: number;
-  retailer: string;
+  price?: number;
+  retailer?: string;
+  referenceUrl?: string;
   tone: string;
   category: "Sneakers";
   styles: StyleId[];
@@ -24,7 +25,14 @@ export type Shoe = {
   }[];
 };
 export const shoes = catalogData as Shoe[];
-export const previewShoes = shoes.slice(0, 4);
+export const previewShoes = shoes
+  .slice(0, 4)
+  .filter(
+    (shoe): shoe is Shoe & { price: number; retailer: string } =>
+      typeof shoe.price === "number" &&
+      shoe.price > 0 &&
+      typeof shoe.retailer === "string",
+  );
 export const money = (value: number) =>
   new Intl.NumberFormat("en-IN", {
     style: "currency",

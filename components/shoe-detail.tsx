@@ -30,6 +30,8 @@ export default function ShoeDetail({
   const identity = identityFor(shoe),
     offers = compareOffers(currentRows(rows, identity, now), size, now),
     tax = sizeTax(rows, identity, size, now);
+  const storeCount = new Set(offers.confirmed.map((offer) => offer.retailer))
+    .size;
   async function refresh(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
@@ -80,6 +82,16 @@ export default function ShoeDetail({
             <p className="feature-intro">
               {shoe.color} · {shoe.edition} · {shoe.range} · {shoe.height} ankle
             </p>
+            {shoe.referenceUrl && (
+              <a
+                className="back-link"
+                href={shoe.referenceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Official product reference <ArrowUpRight size={14} />
+              </a>
+            )}
             <label className="detail-size">
               Your UK size
               <select
@@ -153,6 +165,12 @@ export default function ShoeDetail({
             <h2>Compare stores</h2>
             <span>UK {size} · INR listed prices</span>
           </div>
+          {!loading && storeCount === 1 && (
+            <p className="data-notice">
+              One verified store has an offer for this size. More store
+              comparisons are pending.
+            </p>
+          )}
           {loading ? (
             <p className="data-notice">Loading retailer observations…</p>
           ) : offers.confirmed.length ? (
@@ -167,7 +185,9 @@ export default function ShoeDetail({
                 <span>
                   {o.retailer}
                   {offers.winners.some((w) => w.id === o.id) && (
-                    <small>LOWEST</small>
+                    <small>
+                      {storeCount > 1 ? "LOWEST TRACKED" : "TRACKED OFFER"}
+                    </small>
                   )}
                 </span>
                 <span className="offer-age">

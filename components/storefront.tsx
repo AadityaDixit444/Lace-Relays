@@ -49,7 +49,7 @@ function Brand() {
 export default function Storefront() {
   const router = useRouter();
   const [size, setSize] = useState(7),
-    [selected, setSelected] = useState(shoes[0]),
+    [selected, setSelected] = useState<Shoe>(shoes[0]),
     [panel, setPanel] = useState<Panel>(null),
     [query, setQuery] = useState(""),
     [saved, setSaved] = useState<string[]>([]),
@@ -696,8 +696,8 @@ export default function Storefront() {
             ) : (
               <>
                 <p className="result-label">
-                  {query ? "Matching pairs" : "Explore the preview collection"}{" "}
-                  <span>Sample data</span>
+                  {query ? "Matching pairs" : "Explore the catalog"}{" "}
+                  <span>Check prices on the pair page</span>
                 </p>
                 {results.length ? (
                   results.map((s) => (
@@ -719,10 +719,10 @@ export default function Storefront() {
                 ) : (
                   <div className="empty-state">
                     <Search size={24} />
-                    <h3>That pair isn’t in the preview yet.</h3>
+                    <h3>That pair isn’t in the catalog yet.</h3>
                     <p>
-                      Try Samba, Dunk, 530 or Palermo. Live discovery needs a
-                      connected provider.
+                      Try a model name or article code. Live search checks
+                      Myntra and Nykaa Fashion.
                     </p>
                     <button
                       className="button outline"

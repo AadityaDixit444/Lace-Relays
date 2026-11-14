@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "shoeId": "asics-classic-ct-s-verdigris",
+    "brand": "ASICS",
+    "article": "1201B069.300",
+    "color": "Verdigris / Cream",
+    "edition": "Classic CT S",
+    "range": "adult",
+    "retailer": "Nykaa Fashion",
+    "listingId": "27846642",
+    "sizeSystem": "UK",
+    "verified": true,
+    "articleImageToken": "1201B069.300",
+    "sourceColor": "Aqua",
+    "sourceName": "CLASSIC CT S Aqua Sneakers",
+    "currency": "INR",
+    "currencyEvidenceUrl": "https://www.nykaafashion.com/asics-classic-ct-s-aqua-sneakers/p/27846642",
+    "evidence": {
+      "referenceUrl": "https://www.asics.co.in/1201b069-300-classic-ct-s.html",
+      "listingUrl": "https://www.nykaafashion.com/asics-classic-ct-s-aqua-sneakers/p/27846642",
+      "articleImageUrl": "https://adn-static1.nykaa.com/nykdesignstudio-images/pub/media/catalog/product/1/4/14c161d1201B069.300_1.jpg?rnd=20200526195200",
+      "reviewedAt": "2026-11-14T12:41:45.359Z",
+      "note": "Exact article on source image; official colour Verdigris/Cream is listed as Aqua by Nykaa. Retailer page explicitly shows INR prices and UK sizes."
+    }
+  }
+]

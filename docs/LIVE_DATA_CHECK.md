@@ -46,3 +46,23 @@ These are reference selections, not verified retailer bindings. `data/retailer-b
 Product detail pages now include a keyboard-accessible native image dialog, a movable 3x lens and a separate magnified pane. Desktop users move the pointer; touch users tap to open and drag the source; arrow keys move the lens. Escape and the close button dismiss the modal. Images reuse existing assets; resolution limits apply. Multi-angle thumbnails require real additional photographs and are not fabricated.
 
 Verification: Supabase migration is now applied. FastAPI `/health` and `/shoes/samba-og` returned HTTP 200 in Supabase mode, and the Next.js `/api/shoes/samba-og` proxy returned HTTP 200 after correcting the local `LACERELAY_API_URL`. No credentials were changed or committed. The mobile-width browser check confirmed that the magnifier dialog opens, shows source and enlarged panes, accepts keyboard focus, and closes with Escape. Frontend tests (11), backend tests (8), lint, production build and source security scan passed; the Python test client has an upstream deprecation warning. Touch hardware dragging and desktop pointer tracking were not manually exercised.
+
+## First verified live pair (14 November 2026)
+
+The Nykaa connector used Myntra's `id` parameter incorrectly. Nykaa product detail requires `url` (a product URL or numeric ID), per https://api.sh/docs/nykaafashion-product. Fixed the adapter and added a transport regression test for both retailers.
+
+ASICS Classic CT S, article **1201B069.300**, Verdigris / Cream, is now in the shared catalog as `asics-classic-ct-s-verdigris`. Verified Nykaa listing `27846642` calls the colour Aqua. Its product image includes the exact article `1201B069.300`; the official reference confirms the colour name. The Nykaa listing page explicitly shows INR currency and UK size labels. The previous green result `28371731` uses article `1201B069301` in its images and is excluded. Source evidence is stored alongside the binding in `data/retailer-bindings.json`.
+
+Every refresh checks the mapped article image token, source model name, brand and colour. Changed or missing evidence rejects the mapping. Missing upstream currency can use the reviewed listing's INR evidence only when the source URL matches the currency evidence URL; an explicit upstream currency is never overridden. No catalog sample price was added for this live pair.
+
+The full Next.js proxy → FastAPI → API.SH → Supabase path returned HTTP 200 and persisted seven real size observations, preserving the source timestamp. UK 7 was INR 3,500 and in stock at that observation. An immediate second refresh returned `cached`; an independent read returned the same seven records. These are real observations, not test fixtures. There is currently **one verified store**, so this does not establish a cross-store lowest price. The UI labels it as a tracked offer and explains limited coverage.
+
+Remaining pair status:
+- Alleyoop: black Nykaa and Myntra candidates found, but the user's Amazon reference article is still unverified. Do not assume article CJ0882-001 from the candidate photo alone.
+- Precision 8 Low IH1104-003: Myntra candidates exist; full article/colour matching is pending. Nykaa's reference ID returns 404 even with the corrected parameter.
+- Jordan 1 Mid SE IB7110-002: no verified listing. The reference ID returns 404 via Nykaa.
+- PUMA 309452 Black-Bright Papaya: black and white Myntra candidates exist; exact colour article suffix is still unverified. The white candidate must not be linked to the black reference.
+
+Product photos are original retailer assets saved locally for the catalog; no generated substitute photo is used. Secrets and raw provider payloads remain ignored and were not copied into catalog data.
+
+Validation for this milestone: 10 Python tests and 11 TypeScript tests passed, including the Nykaa parameter regression and rejection of changed model/colour/article evidence. Ruff, ESLint, production build and source secret scan passed. Python still reports the upstream Starlette/httpx test-client deprecation warning. Browser QA at mobile width confirmed the exact article, loaded UK 7 offer, single-store coverage notice and the first actual history point. No backend deployment or GitHub push was performed.

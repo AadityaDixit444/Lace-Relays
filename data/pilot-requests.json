@@ -46,7 +46,8 @@
     "referenceModel": "ASICS Classic CT S",
     "referenceArticle": "1201B069.300",
     "referenceColor": "VERDIGRIS / CREAM",
-    "verificationStatus": "reference-only",
-    "verificationNote": "Reference identity read from product page; no verified provider mapping or UK 7 stock."
+    "verificationStatus": "one-retailer-verified",
+    "verificationNote": "Nykaa 27846642 matches article 1201B069.300 on source image. UK 7 price/stock evidence is available; additional stores are unverified.",
+    "shoeId": "asics-classic-ct-s-verdigris"
   }
 ]
