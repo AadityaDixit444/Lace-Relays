@@ -39,6 +39,7 @@ def safe_url(value, retailer):
         "Myntra": "myntra.com",
         "Nykaa Fashion": "nykaafashion.com",
         "ASICS India": "asics.co.in",
+        "Nike India": "nike.in",
     }.get(retailer)
     if host is None:
         return None
@@ -239,6 +240,10 @@ class RetailerClient:
     async def detail(self, binding):
         if binding["retailer"] == "ASICS India":
             from api.asics import fetch_product
+
+            return await fetch_product(binding, self.transport)
+        if binding["retailer"] == "Nike India":
+            from api.nike import fetch_product
 
             return await fetch_product(binding, self.transport)
         parameter = "url" if binding["retailer"] == "Nykaa Fashion" else "id"

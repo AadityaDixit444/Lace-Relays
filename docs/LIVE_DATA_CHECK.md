@@ -109,3 +109,53 @@ test-client deprecation warning remains. The final browser visual check was
 blocked by the browser permission gate; no alternate browser access was attempted.
 Hosted API verification completed before that denial. Four other selected pairs
 still lack verified exact retailer mappings and are not claimed as connected.
+
+
+## Nike reference tracking and clearer catalog search
+
+The official Nike India pages expose inert `__PRELOADED_STATE__` JSON with product
+and size-variant data. The new read-only adapter parses that JSON without executing
+scripts. Parent ID/SKU, model, adult subtitle, Style and Colour Shown must match;
+each child must repeat the article and colour, belong to that parent, and provide
+its own explicit UK label and numeric price. JSON-LD must identify the same parent
+SKU, canonical reference URL and INR currency. Parent sold-out status overrides
+child availability; duplicate IDs/sizes, identity drift, missing currency, US-only
+labels, redirects, overlarge pages and expired CDN ages fail closed. Source fetches
+never receive provider credentials. No new dependencies were added.
+
+New local catalog pairs:
+- Nike Precision 8 Low IH1104-003, Black / White / Dusty Cactus: Nike India product
+  27763049. Ten real size observations saved; UK 7 observed at INR 5,396, in stock.
+- Air Jordan 1 Mid SE IB7110-002, Black / Light Wild Mango / Olive Grey: Nike India
+  product 24889618. Seven real size observations saved; UK 7 observed sold out.
+  Its listed INR 12,295 price is retained as evidence, never ranked as buyable.
+
+Repeated refreshes used cached observations, and independent database reads
+returned the same records. The local scheduler included all three verified pairs.
+The additional observations are real Supabase records; they are not catalog sample
+prices. The existing deployed API still needs the updated catalog/connector before
+it can serve the new Nike detail routes.
+
+Search now groups reviewed tracked pairs, design previews, unverified retailer
+results and references awaiting matching. Verified pairs remain visible when live
+search returns candidates. Word order, article punctuation and UK-size suffixes are
+supported. Changing a query or closing the search dialog aborts stale discovery
+requests. Detail pages show explicit sold-out evidence instead of claiming no data.
+The local browser check confirmed the Precision UK 7 offer, the Jordan sold-out
+state and search classification. The default homepage remains a labelled preview.
+
+Remaining evidence gaps:
+- Alleyoop: Amazon returned a verification challenge. User-provided identifier
+  1624832 has not been verified as a manufacturer article; its field label was
+  requested. It is searchable only as a pending reference, not a verified pair.
+- PUMA: official page state confirms colour-specific article 309452_01, Black-Bright
+  Papaya. Its separate public size query returned UNAUTHENTICATED; no authentication
+  bypass was attempted and no UK 7 price or stock was inferred from the parent price.
+- Myntra Precision candidates were checked, but none provided the exact article
+  evidence needed for a second-store mapping. Similar names/colours were not promoted.
+
+Validation: 30 Python tests and 14 TypeScript tests passed, along with Ruff, ESLint,
+Next production build and secret scans. ESLint now excludes ignored provider dump
+and virtualenv directories, rather than linting downloaded third-party scripts.
+The upstream Starlette/httpx test-client deprecation warning remains. These changes
+have not been pushed to GitHub or redeployed.

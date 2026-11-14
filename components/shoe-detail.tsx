@@ -30,6 +30,9 @@ export default function ShoeDetail({
   const identity = identityFor(shoe),
     offers = compareOffers(currentRows(rows, identity, now), size, now),
     tax = sizeTax(rows, identity, size, now);
+  const soldOut = currentRows(rows, identity, now).filter(
+    (r) => r.size === size && r.stock === "out_of_stock",
+  );
   const storeCount = new Set(offers.confirmed.map((offer) => offer.retailer))
     .size;
   async function refresh(e: React.FormEvent) {
@@ -203,10 +206,34 @@ export default function ShoeDetail({
             ))
           ) : (
             <p className="data-notice">
-              No eligible confirmed in-stock offers for UK {size}. No verified
-              size-level retailer data is available for this selection.
+              {soldOut.length
+                ? `UK ${size} was observed sold out at the tracked stores below.`
+                : `No verified in-stock offer is available for UK ${size}.`}
             </p>
           )}
+          {soldOut.map((offer) => (
+            <a
+              className="offer-row sold-out-offer"
+              key={offer.id}
+              href={offer.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>
+                {offer.retailer}
+                <small>SOLD OUT</small>
+              </span>
+              <span className="offer-age">
+                Observed{" "}
+                {new Date(offer.observedAt).toLocaleString("en-IN", {
+                  timeZone: "Asia/Kolkata",
+                })}{" "}
+                IST
+              </span>
+              <span>UK {size} unavailable</span>
+              <ArrowUpRight size={14} />
+            </a>
+          ))}
           {offers.unconfirmed.length > 0 && (
             <details>
               <summary>

@@ -217,5 +217,37 @@
     "tone": "green",
     "offers": [],
     "referenceUrl": "https://www.asics.co.in/1201b069-300-classic-ct-s.html"
+  },
+  {
+    "id": "nike-precision-8-low-cactus",
+    "brand": "Nike",
+    "name": "Nike Precision 8 Low",
+    "color": "Black / White / Dusty Cactus",
+    "article": "IH1104-003",
+    "edition": "Nike Precision 8 Low",
+    "range": "adult",
+    "category": "Sneakers",
+    "styles": ["basketball"],
+    "height": "Low",
+    "image": "/shoes/precision-pilot.jpg",
+    "tone": "grey",
+    "offers": [],
+    "referenceUrl": "https://www.nike.in/nike-precision-8-low-men-s-basketball-shoes/p/27763049"
+  },
+  {
+    "id": "air-jordan-1-mid-se-mango",
+    "brand": "Nike",
+    "name": "Air Jordan 1 Mid SE",
+    "color": "Black / Light Wild Mango / Olive Grey",
+    "article": "IB7110-002",
+    "edition": "Air Jordan 1 Mid SE",
+    "range": "adult",
+    "category": "Sneakers",
+    "styles": ["basketball"],
+    "height": "Mid",
+    "image": "/shoes/jordan-pilot.jpg",
+    "tone": "grey",
+    "offers": [],
+    "referenceUrl": "https://www.nike.in/nike-air-jordan-1-mid-se-men-s-shoes/p/24889618"
   }
 ]

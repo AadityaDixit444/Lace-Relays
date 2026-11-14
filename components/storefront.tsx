@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import {
   previewShoes as shoes,
-  shoes as catalogShoes,
   money,
   ukSizes,
   type Shoe,
@@ -29,6 +28,7 @@ import { ProductCard } from "./product-card";
 import { BrandStrip } from "./brand-strip";
 import type { Listing } from "@/lib/providers";
 import { compareOffers } from "@/lib/comparison";
+import { catalogSearch, catalogLabel } from "@/lib/catalog-search";
 
 type Panel = "search" | "saved" | "deal" | "about" | null;
 // Fixed reference time for illustrative offers; never presented as live data.
@@ -62,6 +62,8 @@ export default function Storefront() {
     [listings, setListings] = useState<Listing[] | null>(null),
     [sourceNote, setSourceNote] = useState("");
   const dialog = useRef<HTMLDialogElement>(null);
+  const searchRequest = useRef<AbortController | null>(null);
+  useEffect(() => () => searchRequest.current?.abort(), [panel]);
   useEffect(() => {
     if (new URLSearchParams(window.location.search).get("search") === "1") {
       // Honour the shared header's search link after hydration.
@@ -111,18 +113,7 @@ export default function Storefront() {
     document.addEventListener("keydown", shortcut);
     return () => document.removeEventListener("keydown", shortcut);
   }, []);
-  const results = useMemo(
-    () =>
-      catalogShoes.filter((s) =>
-        `${s.name} ${s.color} ${s.article}`.toLowerCase().includes(
-          query
-            .toLowerCase()
-            .replace(/\buk\s*\d+(\.\d+)?/gi, "")
-            .trim(),
-        ),
-      ),
-    [query],
-  );
+  const results = useMemo(() => catalogSearch(query), [query]);
   const ranked = compareOffers(
     selected.offers.map((o) => ({
       id: o.retailer,
@@ -168,6 +159,9 @@ export default function Storefront() {
     if (sizeMatch && ukSizes.includes(Number(sizeMatch[1])))
       setSize(Number(sizeMatch[1]));
     if (!live) return;
+    searchRequest.current?.abort();
+    const controller = new AbortController();
+    searchRequest.current = controller;
     setBusy(true);
     setError("");
     setListings(null);
@@ -179,17 +173,21 @@ export default function Storefront() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ q: query }),
+        signal: controller.signal,
       });
       const data = await res.json();
+      if (controller.signal.aborted || searchRequest.current !== controller)
+        return;
       if (!res.ok) throw new Error(data.error || "Search unavailable.");
       setListings(data.listings);
       setSourceNote(
         `${data.sources.filter((s: { status: string }) => s.status !== "failed").length} of ${data.sources.length} stores checked${data.stale ? " · Previous results; refresh failed" : ""}. Exact model, colour and UK size still need verification.`,
       );
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Please try again.");
+      if (!controller.signal.aborted)
+        setError(err instanceof Error ? err.message : "Please try again.");
     } finally {
-      setBusy(false);
+      if (searchRequest.current === controller) setBusy(false);
     }
   }
   function saveDeal(e: React.FormEvent<HTMLFormElement>) {
@@ -594,8 +592,11 @@ export default function Storefront() {
                   placeholder="Try adidas Samba OG white UK 7"
                   value={query}
                   onChange={(e) => {
+                    searchRequest.current?.abort();
                     setQuery(e.target.value);
                     setListings(null);
+                    setBusy(false);
+                    setError("");
                   }}
                   maxLength={100}
                 />
@@ -613,7 +614,10 @@ export default function Storefront() {
                     type="checkbox"
                     checked={live}
                     onChange={(e) => {
+                      searchRequest.current?.abort();
                       setLive(e.target.checked);
+                      setListings(null);
+                      setBusy(false);
                       setError("");
                     }}
                   />{" "}
@@ -660,9 +664,46 @@ export default function Storefront() {
                 {error}
               </p>
             )}
-            {live && listings !== null ? (
+            {[
+              { title: "Tracked pairs", items: results.tracked },
+              { title: "Catalog previews", items: results.preview },
+            ].map(
+              (group) =>
+                group.items.length > 0 && (
+                  <section key={group.title} aria-label={group.title}>
+                    <p className="result-label">
+                      {group.title}
+                      <span>
+                        {group.items.length}{" "}
+                        {group.items.length === 1 ? "pair" : "pairs"}
+                      </span>
+                    </p>
+                    {group.items.map((s) => (
+                      <button
+                        className="search-result"
+                        key={s.id}
+                        onClick={() => pick(s)}
+                      >
+                        <img src={s.image} alt="" width="100" height="60" />
+                        <span>
+                          <strong>{s.name}</strong>
+                          <small>
+                            {s.color} · {s.article}
+                          </small>
+                          <small className="search-coverage">
+                            {catalogLabel(s)}
+                          </small>
+                        </span>
+                        <ArrowUpRight size={18} />
+                      </button>
+                    ))}
+                  </section>
+                ),
+            )}
+            {live && listings !== null && (
               <>
-                <p className="result-label">{sourceNote}</p>
+                <p className="result-label">Unverified retailer listings</p>
+                <p className="collection-note">{sourceNote}</p>
                 {listings.length ? (
                   listings.map((item) => (
                     <a
@@ -693,47 +734,53 @@ export default function Storefront() {
                   </div>
                 )}
               </>
-            ) : (
-              <>
-                <p className="result-label">
-                  {query ? "Matching pairs" : "Explore the catalog"}{" "}
-                  <span>Check prices on the pair page</span>
-                </p>
-                {results.length ? (
-                  results.map((s) => (
-                    <button
-                      className="search-result"
-                      key={s.id}
-                      onClick={() => pick(s)}
-                    >
-                      <img src={s.image} alt="" width="100" height="60" />
-                      <span>
-                        <strong>{s.name}</strong>
-                        <small>
-                          {s.color} · {s.article}
-                        </small>
-                      </span>
-                      <ArrowUpRight size={18} />
-                    </button>
-                  ))
-                ) : (
-                  <div className="empty-state">
-                    <Search size={24} />
-                    <h3>That pair isn’t in the catalog yet.</h3>
-                    <p>
-                      Try a model name or article code. Live search checks
-                      Myntra and Nykaa Fashion.
-                    </p>
-                    <button
-                      className="button outline"
-                      onClick={() => setQuery("")}
-                    >
-                      See all preview pairs
-                    </button>
-                  </div>
-                )}
-              </>
             )}
+            {results.pending.length > 0 && (
+              <section aria-label="Matching pending">
+                <p className="result-label">
+                  Matching pending<span>Selected references</span>
+                </p>
+                <p className="collection-note">
+                  These pairs are selected for the pilot. Verified price
+                  tracking is not connected yet.
+                </p>
+                {results.pending.map((pair) => (
+                  <a
+                    className="search-result"
+                    key={pair.referenceUrl}
+                    href={pair.referenceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span>
+                      <strong>{pair.referenceModel}</strong>
+                      <small>
+                        {pair.referenceColor} · Open original reference
+                      </small>
+                    </span>
+                    <ExternalLink size={17} />
+                  </a>
+                ))}
+              </section>
+            )}
+            {!results.tracked.length &&
+              !results.preview.length &&
+              !results.pending.length && (
+                <div className="empty-state">
+                  <Search size={24} />
+                  <h3>No catalog pair matches that search.</h3>
+                  <p>
+                    Try a model name or article code. Live discovery can find
+                    additional listings; exact matches still need verification.
+                  </p>
+                  <button
+                    className="button outline"
+                    onClick={() => setQuery("")}
+                  >
+                    See all catalog pairs
+                  </button>
+                </div>
+              )}
           </>
         )}
         {panel === "saved" && (

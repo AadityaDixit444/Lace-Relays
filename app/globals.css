@@ -2709,3 +2709,16 @@ h2 {
     font-size: 14px;
   }
 }
+
+.search-result .search-coverage {
+  margin-top: 4px;
+  color: #79528e;
+  font-size: 10px;
+}
+.sold-out-offer {
+  background: #f7f5f8;
+  color: #716a77;
+}
+.sold-out-offer small {
+  color: #716a77;
+}

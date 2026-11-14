@@ -7,7 +7,9 @@
     "referenceArticle": null,
     "referenceColor": "Black / White / Black",
     "verificationStatus": "reference-only",
-    "verificationNote": "Amazon page could not be read; article code and UK 7 stock unverified."
+    "verificationNote": "Amazon returned a verification challenge. User supplied identifier 1624832, but no matching Nike manufacturer article was verified; its field label is still needed.",
+    "suppliedIdentifier": "1624832",
+    "identifierStatus": "unverified"
   },
   {
     "query": "Nike Precision 8 Low",
@@ -16,8 +18,9 @@
     "referenceModel": "Nike Precision 8 Low",
     "referenceArticle": "IH1104-003",
     "referenceColor": "Black / White / Dusty Cactus",
-    "verificationStatus": "reference-only",
-    "verificationNote": "Reference identity read from product page; no verified provider mapping or UK 7 stock."
+    "verificationStatus": "one-retailer-verified",
+    "verificationNote": "Verified Nike India product and UK variants. Other store mappings are pending; sold-out variants are retained and excluded from lowest-price rankings.",
+    "shoeId": "nike-precision-8-low-cactus"
   },
   {
     "query": "Air Jordan 1 Mid SE",
@@ -26,18 +29,19 @@
     "referenceModel": "Air Jordan 1 Mid SE",
     "referenceArticle": "IB7110-002",
     "referenceColor": "Black / Light Wild Mango / Olive Grey",
-    "verificationStatus": "reference-only",
-    "verificationNote": "Reference identity read from product page; no verified provider mapping or UK 7 stock."
+    "verificationStatus": "one-retailer-verified",
+    "verificationNote": "Verified Nike India product and UK variants. Other store mappings are pending; sold-out variants are retained and excluded from lowest-price rankings.",
+    "shoeId": "air-jordan-1-mid-se-mango"
   },
   {
     "query": "PUMA McLaren Racing Speedcat",
     "sizeUk": 7,
     "referenceUrl": "https://in.puma.com/in/en/pd/mclaren-racing-speedcat-sneakers/309452",
     "referenceModel": "PUMA McLaren Racing Speedcat",
-    "referenceArticle": "309452",
+    "referenceArticle": "309452_01",
     "referenceColor": "PUMA Black / Bright Papaya",
-    "verificationStatus": "reference-only",
-    "verificationNote": "Base style identified; colour-specific article suffix and retailer mapping unverified."
+    "verificationStatus": "identity-confirmed-stock-pending",
+    "verificationNote": "Official PUMA page confirms Black-Bright Papaya article 309452_01. Size data is loaded separately; the public size query returned UNAUTHENTICATED. No size price or stock mapping is enabled."
   },
   {
     "query": "ASICS Classic CT S",

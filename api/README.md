@@ -74,6 +74,17 @@ UK variant labels, INR currency and per-variant final prices are required. No US
 size conversion, parent-price fallback or implied stock is used. CDN Age, when
 present, is subtracted from the observation time. The source uses no API.SH key.
 
+## Nike India source
+
+`api/nike.py` parses the public product page's inert JSON state and Product
+JSON-LD; it never executes retailer JavaScript or forwards any credentials. It
+requires matching parent/child IDs and SKUs, article, colour, model and adult
+subtitle, explicit UK variant labels, variant-level prices and INR evidence. Sold
+out is a recorded state; it cannot set a lowest price. Missing or contradictory
+identity, price, size or currency fields fail closed. Responses are bounded to
+2 MB, redirects are rejected and CDN Age is preserved. The backend packager
+includes this runtime module; deploying only the frontend does not update bindings.
+
 ## Hosting and scheduled refresh
 
 The frontend and Python backend are separate Vercel projects. Prepare a clean
