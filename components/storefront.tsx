@@ -26,6 +26,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ProductCard } from "./product-card";
+import { BrandStrip } from "./brand-strip";
 import type { Listing } from "@/lib/providers";
 import { compareOffers } from "@/lib/comparison";
 
@@ -324,20 +325,7 @@ export default function Storefront() {
             </div>
           </div>
         </section>
-        <div className="retailer-strip">
-          <div className="container retailer-inner">
-            <span className="strip-label">
-              Stores in
-              <br />
-              this preview
-            </span>
-            <span className="retailer amazon">amazon</span>
-            <span className="retailer flipkart">Flipkart</span>
-            <span className="retailer myntra">Myntra</span>
-            <span className="retailer ajio">AJIO</span>
-            <span className="retailer adidas">adidas</span>
-          </div>
-        </div>
+        <BrandStrip />
         <section id="trending" className="container trending-section">
           <div className="section-header">
             <div>
@@ -660,8 +648,9 @@ export default function Storefront() {
                     onChange={(e) => setToken(e.target.value)}
                   />
                   <p>
-                    Live search requires a connected provider. Search results
-                    need model, colour and size verification.
+                    Live search currently checks Myntra and Nykaa Fashion. Other
+                    stores are planned. Search results need model, colour and
+                    size verification.
                   </p>
                 </div>
               )}
