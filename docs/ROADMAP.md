@@ -1,37 +1,22 @@
 # LaceRelay roadmap
 
-## Implemented locally in this iteration
+## Verified and implemented
 
-- Visual discovery: seven look tiles, manual multi-tags, independent ankle heights,
-  OR looks + AND height/exact UK size/budget, unique counts, removable chips and
-  return-state preservation.
-- Size Tax: shared current eligibility, all-size benchmarks, explicit zero/tie,
-  unavailable and only-one-priced-size states.
-- All-size observations: variant-level normalization, durable local storage,
-  Supabase migration/adapter, immutable snapshot deduplication and null legacy sizes.
-- Shoe detail history: selected size default, up to three series, India-day lows,
-  retailer/timestamp inspection, gaps/sold-out distinction and mobile all-size table.
-- Labelled fixture journey and edge-case tests. No authenticated real-data journey.
+- Responsive approved Template A frontend, style discovery and independent ankle-height, UK-size and budget filters.
+- Product magnifier, all-size observations, Size Tax and India-day price history with missing-day gaps.
+- Python/FastAPI backend, Supabase persistence, source freshness and immutable observation deduplication.
+- Private Myntra/Nykaa search; exact-pair refresh uses reviewed mappings rather than broad search matches.
+- ASICS Classic CT S 1201B069.300 Verdigris/Cream: two verified sources, Nykaa Fashion and ASICS India. Fourteen real size observations are stored. UK 7 was observed at INR 3,500 and INR 3,499 respectively.
+- Authenticated daily refresh route, production package preparation and hosted backend readiness checks.
+- Separate Vercel backend and Next.js frontend with server-only authenticated communication; deployment protection stays enabled.
 
-## Next validation milestone
+## Next priorities
 
-1. Provider authentication and five-name searches work. Add verified mappings only
-   after confirming exact article, colourway, edition and adult/kids range.
-2. Four live detail calls returned UK 7 stock/price fields but no sufficient brand
-   article evidence. Exact links/colourways are still needed, especially Air Jordan
-   and PUMA McLaren Speedcat. Search hits can be unrelated products or generations.
-3. Configure Supabase, apply the migration, test service-role privileges/RLS and
-   verify observations persist across hosted executions.
-4. Run the same discovery → size comparison → Size Tax → history journey with real
-   observations. Monitor credit use and add durable quota controls before public access.
-5. Review, approve GitHub push, and explicitly publish a new protected Vercel version.
+1. Verify article/colour/edition evidence for the remaining Alleyoop, Precision 8 Low, Jordan 1 Mid SE and McLaren Speedcat references. Keep ambiguous candidates out of exact comparisons.
+2. Observe the first automatic Vercel cron run and verify history grows from actual later observations. Add monitoring, durable quotas, distributed job leases and retries before broader public live access.
+3. Repair the backend project's Vercel GitHub Login Connection before relying on automatic backend Git deployments. Direct deployments currently work; GitHub pushes still require per-push approval.
+4. Expand retailer coverage one verified connector at a time, preserving explicit UK size, currency, stock and source-time evidence.
 
-## Remaining original roadmap / backlog
+## Later backlog
 
-Source proof and authenticated two-store pilot are incomplete. Existing UI and
-comparison foundations are implemented; broader matching and source overlap remain
-to prove. Add retailers individually after verification. Real trending, accounts,
-watchlists/alerts, community review, contribution rewards and funded vouchers remain
-unchanged backlog ideas. Python/FastAPI now replaces the Next server logic by
-explicit user choice. SQLAlchemy remains optional; Python uses SQLite and Supabase
-REST with the existing observation schema.
+Real trending, accounts, watchlists/alerts, community moderation, contribution rewards and funded vouchers remain future work. The original Python/FastAPI backend plan is in use. SQLAlchemy is optional; current persistence uses Supabase REST and local SQLite for development.

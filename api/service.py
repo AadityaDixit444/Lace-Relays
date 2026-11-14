@@ -20,6 +20,7 @@ class Service:
         self.provider, self.store, self.bindings, self.catalog = provider, store, bindings, catalog
         self.clock, self.call_limit = clock, call_limit
         self.calls, self.cache, self.pending, self.refresh_pending = 0, {}, {}, {}
+        self.scheduled_lock = asyncio.Lock()
 
     def reserve(self, count):
         if self.calls + count > self.call_limit:
@@ -115,7 +116,7 @@ class Service:
             try:
                 raw = await self.provider.detail(binding)
                 rows, limitation = normalize_detail(
-                    raw, binding, shoe, datetime.fromtimestamp(now, UTC).isoformat()
+                    raw, binding, shoe, datetime.fromtimestamp(self.clock(), UTC).isoformat()
                 )
                 await self.store.save(rows)
                 return dict(
@@ -137,3 +138,36 @@ class Service:
                 )
 
         return await asyncio.gather(*(lookup(b) for b in selected))
+
+    async def refresh_verified(self):
+        if self.scheduled_lock.locked():
+            return {"ok": True, "status": "already_running", "results": []}
+        async with self.scheduled_lock:
+            verified = {b["shoeId"] for b in self.bindings if b.get("verified")}
+            selected = [shoe for shoe in self.catalog if shoe["id"] in verified]
+            # This serverless pilot has a bounded execution budget. Do not silently
+            # skip additional pairs when a larger worker is needed.
+            if len(selected) > 5:
+                raise ValueError("Scheduled catalog exceeds pilot batch limit")
+            results = []
+            for shoe in selected:
+                try:
+                    sources = await self.refresh(shoe)
+                    results.append({"shoeId": shoe["id"], "sources": sources})
+                except PilotLimit:
+                    raise
+                except Exception:
+                    results.append(
+                        {
+                            "shoeId": shoe["id"],
+                            "sources": [
+                                {"status": "failed", "limitation": "Scheduled refresh unavailable."}
+                            ],
+                        }
+                    )
+            ok = all(
+                source["status"] in ("checked", "cached")
+                for item in results
+                for source in item["sources"]
+            )
+            return {"ok": ok, "status": "complete", "results": results}

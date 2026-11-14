@@ -35,7 +35,13 @@ def freshness(value, now):
 def safe_url(value, retailer):
     if not isinstance(value, str):
         return None
-    host = "myntra.com" if retailer == "Myntra" else "nykaafashion.com"
+    host = {
+        "Myntra": "myntra.com",
+        "Nykaa Fashion": "nykaafashion.com",
+        "ASICS India": "asics.co.in",
+    }.get(retailer)
+    if host is None:
+        return None
     try:
         u = urlparse(value)
         return (
@@ -231,6 +237,10 @@ class RetailerClient:
         return normalize_search(await self.request(retailer, "search", q=query), retailer)
 
     async def detail(self, binding):
+        if binding["retailer"] == "ASICS India":
+            from api.asics import fetch_product
+
+            return await fetch_product(binding, self.transport)
         parameter = "url" if binding["retailer"] == "Nykaa Fashion" else "id"
         return await self.request(
             binding["retailer"], "product", **{parameter: binding["listingId"]}

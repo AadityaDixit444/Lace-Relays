@@ -38,6 +38,8 @@ function walk(dir) {
         "APISH_KEY",
         "PILOT_ACCESS_TOKEN",
         "SUPABASE_SERVICE_ROLE_KEY",
+        "CRON_SECRET",
+        "LACERELAY_BACKEND_BYPASS_SECRET",
       ])
         if (template[name])
           problems.push(`${file}: ${name} must remain an empty placeholder`);

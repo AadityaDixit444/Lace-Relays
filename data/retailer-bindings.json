@@ -22,5 +22,24 @@
       "reviewedAt": "2026-11-14T12:41:45.359Z",
       "note": "Exact article on source image; official colour Verdigris/Cream is listed as Aqua by Nykaa. Retailer page explicitly shows INR prices and UK sizes."
     }
+  },
+  {
+    "shoeId": "asics-classic-ct-s-verdigris",
+    "brand": "ASICS",
+    "article": "1201B069.300",
+    "color": "Verdigris / Cream",
+    "edition": "Classic CT S",
+    "range": "adult",
+    "sizeSystem": "UK",
+    "verified": true,
+    "retailer": "ASICS India",
+    "listingId": "1201B069.300",
+    "sourceUrl": "https://www.asics.co.in/1201b069-300-classic-ct-s.html",
+    "sourceName": "CLASSIC CT S",
+    "evidence": {
+      "method": "Official ASICS India configurable product SKU and explicit UK variant labels",
+      "endpoint": "https://www.asics.co.in/graphql",
+      "note": "Parent SKU 1201B069.300 and child SKU prefixes must match. Variant final prices must explicitly state INR."
+    }
   }
 ]

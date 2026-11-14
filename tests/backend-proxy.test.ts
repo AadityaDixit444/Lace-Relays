@@ -59,3 +59,35 @@ test("Next routes fail closed and proxy requests without provider secrets", asyn
     else process.env.LACERELAY_API_URL = previous;
   }
 });
+
+test("backend protection credential stays server-side and is scoped to Vercel", async () => {
+  const previousUrl = process.env.LACERELAY_API_URL;
+  const previousSecret = process.env.LACERELAY_BACKEND_BYPASS_SECRET;
+  const originalFetch = globalThis.fetch;
+  try {
+    process.env.LACERELAY_BACKEND_BYPASS_SECRET = "fixture";
+    process.env.LACERELAY_API_URL = "https://external.example.test";
+    let called = false;
+    globalThis.fetch = async (_input, init) => {
+      called = true;
+      const headers = init?.headers as Record<string, string>;
+      assert.equal(headers["x-vercel-protection-bypass"], "fixture");
+      return Response.json({ observations: [] });
+    };
+    assert.equal((await backendProxy("/catalog")).status, 503);
+    assert.equal(called, false);
+    process.env.LACERELAY_API_URL = "https://lace-backend.vercel.app";
+    const response = await backendProxy("/catalog");
+    assert.equal(response.status, 200);
+    assert.equal(called, true);
+    assert.ok(!(await response.text()).includes("fixture"));
+    assert.equal(response.headers.get("x-vercel-protection-bypass"), null);
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (previousUrl === undefined) delete process.env.LACERELAY_API_URL;
+    else process.env.LACERELAY_API_URL = previousUrl;
+    if (previousSecret === undefined)
+      delete process.env.LACERELAY_BACKEND_BYPASS_SECRET;
+    else process.env.LACERELAY_BACKEND_BYPASS_SECRET = previousSecret;
+  }
+});

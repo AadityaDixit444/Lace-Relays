@@ -66,3 +66,46 @@ Remaining pair status:
 Product photos are original retailer assets saved locally for the catalog; no generated substitute photo is used. Secrets and raw provider payloads remain ignored and were not copied into catalog data.
 
 Validation for this milestone: 10 Python tests and 11 TypeScript tests passed, including the Nykaa parameter regression and rejection of changed model/colour/article evidence. Ruff, ESLint, production build and source secret scan passed. Python still reports the upstream Starlette/httpx test-client deprecation warning. Browser QA at mobile width confirmed the exact article, loaded UK 7 offer, single-store coverage notice and the first actual history point. No backend deployment or GitHub push was performed.
+
+
+## Two-store comparison and hosted refresh
+
+Added the official ASICS India public product query as a second source for article
+1201B069.300. Its configurable variant response explicitly labels US8/UK7, SKU
+1201B069.300.8, INR 3,499 and IN_STOCK. The existing Nykaa record for the same UK 7
+pair is INR 3,500. No US-to-UK subtraction or parent-price fallback is used. All
+seven official size variants were saved alongside the seven Nykaa observations.
+The first official request exposed a pre-existing timestamp bug: retrieval time
+was captured before awaiting the retailer. It now records receive time, while
+still rejecting genuine future timestamps; a regression test covers this.
+
+Backend production: https://lace-relays-api.vercel.app
+Backend inspected deployment: https://vercel.com/lace-relays/lace-relays-api/B79pcgsFk4Xja2R4AAnzRVv7jYC4
+Frontend production: https://lace-relays.vercel.app
+Frontend inspected deployment: https://vercel.com/lace-relays/lace-relays/2vMUFawBaycDC7Fkan1cJKx1gJsj
+
+The backend uses an allowlisted deployment package and an explicit Python builder.
+The frontend upload excludes root Python modules and all local environment,
+virtualenv, database and provider dump files. Secrets were configured in hosting,
+not in Git. A server-only backend automation credential lets the Next proxy call
+the protected backend; both projects retain Vercel deployment protection.
+
+Hosted checks passed: /health and /ready returned HTTP 200; backend observations
+returned 14 persisted rows; the deployed frontend's /api/shoes/asics-classic-ct-s-verdigris
+returned the same 14 rows and both UK 7 offers. The hosted /internal/refresh route
+returned HTTP 200 with both sources cached, proving it reused fresh observations.
+Its daily production cron is configured for 01:00 UTC (06:30 IST). The first future
+automatic trigger has not been observed. Job locking and quotas are per process,
+not distributed; stronger controls remain necessary before scaling the pilot.
+
+Vercel's attempted backend GitHub connection failed because the account needs a
+GitHub Login Connection. Direct CLI deployment succeeded. Git pushes remain
+subject to explicit user approval and none was performed for this work.
+
+Checks passed: 17 Python tests, 12 TypeScript tests, Ruff, ESLint, Next production
+build, source secret scan, Python production dependency audit and Node production
+audit. Neither audit found known vulnerabilities. The upstream Starlette/httpx
+test-client deprecation warning remains. The final browser visual check was
+blocked by the browser permission gate; no alternate browser access was attempted.
+Hosted API verification completed before that denial. Four other selected pairs
+still lack verified exact retailer mappings and are not claimed as connected.

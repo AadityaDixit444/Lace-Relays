@@ -9,11 +9,15 @@ export async function backendProxy(path: string, req?: Request) {
       { status: 503 },
     );
   let url: URL;
+  const bypass = process.env.LACERELAY_BACKEND_BYPASS_SECRET;
+  let useBypass = false;
   try {
     url = new URL(configured);
     if (url.username || url.password || url.search || url.hash)
       throw new Error();
     const local = ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname);
+    useBypass = Boolean(bypass && url.hostname.endsWith(".vercel.app"));
+    if (bypass && !local && !useBypass) throw new Error();
     if (
       url.protocol !== "https:" &&
       !(
@@ -56,6 +60,7 @@ export async function backendProxy(path: string, req?: Request) {
       method: req?.method ?? "GET",
       headers: {
         "Content-Type": "application/json",
+        ...(useBypass ? { "x-vercel-protection-bypass": bypass! } : {}),
         ...(req?.headers.get("authorization")
           ? { Authorization: req.headers.get("authorization")! }
           : {}),

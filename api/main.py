@@ -79,6 +79,33 @@ def create_app(settings=None, service=None):
     async def health():
         return {"status": "ok", "backend": "fastapi", "storage": service.store.mode}
 
+    @app.get("/ready")
+    async def ready():
+        if service.store.mode == "unconfigured":
+            raise HTTPException(503, "Persistent storage is not configured.")
+        try:
+            await service.store.read("__readiness__")
+        except Exception:
+            raise HTTPException(503, "Observation storage could not be loaded.") from None
+        return {"status": "ready", "backend": "fastapi", "storage": service.store.mode}
+
+    @app.get("/internal/refresh")
+    async def scheduled_refresh(request: Request):
+        if not settings.cron_secret:
+            raise HTTPException(503, "Scheduled refresh is not configured.")
+        supplied = request.headers.get("authorization", "").removeprefix("Bearer ")
+        if not hmac.compare_digest(supplied.encode(), settings.cron_secret.encode()):
+            raise HTTPException(401, "Scheduled refresh authorization is required.")
+        if service.store.mode == "unconfigured":
+            raise HTTPException(503, "Persistent storage is not configured.")
+        try:
+            result = await service.refresh_verified()
+            return JSONResponse(result, status_code=200 if result["ok"] else 503)
+        except PilotLimit:
+            raise
+        except Exception:
+            raise HTTPException(503, "Scheduled refresh could not complete.") from None
+
     @app.get("/catalog")
     async def get_catalog():
         return await observations()

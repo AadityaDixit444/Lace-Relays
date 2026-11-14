@@ -20,7 +20,10 @@ or in hosting secrets. Restart FastAPI after changing credentials.
 ## Endpoints
 
 - GET `/health`: service status and storage mode; no credentials.
+- GET `/ready`: verifies that observation storage can be read.
 - GET `/catalog`, GET `/shoes/{id}`: recorded observations, fixture-filtered.
+- GET `/internal/refresh`: scheduler-only route, authenticated with a separate `CRON_SECRET`.
+  Refreshes only verified catalog pairs; public search queries cannot add scheduled work.
 - POST `/search`: authenticated, validated retailer discovery, concurrent lookups,
   partial results, shared in-flight requests and 24-hour query caching.
 - POST `/shoes/{id}/refresh`: authenticated verified-listing refresh. All supplied
@@ -62,10 +65,42 @@ Production and development dependency sets are pinned. Pilot call accounting is
 per Python process (100 upstream requests), not a distributed monthly quota.
 Add durable quota enforcement before public live access.
 
-## Hosting
+## ASICS India source
 
-Run Python separately with the repository root as working directory, including
-the shared `data/` files. Install `api/requirements.txt` and start
-`uvicorn api.main:app --host 0.0.0.0 --port $PORT`. Configure production variables
-on that service. Set Vercel's `LACERELAY_API_URL` to its HTTPS origin. This migration
-has not deployed a Python backend; the existing website is unchanged.
+`api/asics.py` reads public ASICS India configurable product data from a fixed
+HTTPS endpoint. A reviewed product URL supplies a GraphQL variable, never an
+arbitrary host or query. Exact parent and child SKU prefixes, model name, explicit
+UK variant labels, INR currency and per-variant final prices are required. No US
+size conversion, parent-price fallback or implied stock is used. CDN Age, when
+present, is subtracted from the observation time. The source uses no API.SH key.
+
+## Hosting and scheduled refresh
+
+The frontend and Python backend are separate Vercel projects. Prepare a clean
+backend upload with `python scripts/prepare_backend.py`; it prints a new ignored
+staging directory. Only runtime modules, pinned requirements and the two shared
+catalog/mapping files are copied. Environment files, provider dumps, SQLite
+files, tests and frontend assets are excluded. Link that directory to the backend
+project, configure production secrets, and run `vercel --prod --yes` there.
+The package uses an explicit Python builder and route to `api/main.py`, so it
+does not inherit Next.js build settings. Do not deploy the repository root to the
+backend project. Keep the existing root `.vercel` link for the Next.js project.
+
+Backend environment: `APISH_KEY`, `PILOT_ACCESS_TOKEN`, `SUPABASE_URL`,
+`SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET`, `LACERELAY_ENV=production`.
+Frontend environment: `LACERELAY_API_URL` (backend HTTPS origin), plus server-only
+`LACERELAY_BACKEND_BYPASS_SECRET` for the protected Vercel backend. Never expose
+these through NEXT_PUBLIC variables. The bypass header is attached only to Vercel
+backend origins, never to the browser or retailer requests. Revoke/rotate the
+backend automation credential in Vercel and update the frontend environment if
+its trust changes. Deployment protection remains enabled on both projects.
+
+Vercel invokes `/internal/refresh` at `0 1 * * *` (01:00 UTC / 06:30 IST), using its
+CRON_SECRET bearer header. A manual hosted invocation has passed. Fresh source
+observations are reused for 24 hours; a trigger does not manufacture a new history
+point. The runner supports at most five verified pairs and returns 503 on batch
+failure; it never deletes prior observations. Overlapping runs are coalesced within
+one Python process. Cross-instance locking, durable monthly provider quotas,
+monitoring and retries are still needed before scaling beyond the private pilot.
+Vercel's schedule should be checked after its first automatic run; registration
+and a successful manual invocation do not prove that a future trigger ran.
